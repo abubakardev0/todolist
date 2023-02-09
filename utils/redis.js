@@ -46,7 +46,7 @@ export async function changeStatus(entityId, status) {
   const todo = await taskRepository.fetch(entityId);
   todo.completed = status;
   if (status === true) {
-    todo.completed_at = Date.now();
+    todo.completed_at = new Date();
   } else {
     todo.completed_at = null;
   }

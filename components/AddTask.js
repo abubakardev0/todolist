@@ -14,7 +14,7 @@ const AddTask = () => {
         body: JSON.stringify({
           task: formData.task,
           completed: false,
-          created_at: Date.now(),
+          created_at: new Date(),
           completed_at: null,
         }),
         headers: {
