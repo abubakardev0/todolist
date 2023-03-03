@@ -1,9 +1,14 @@
 import { useState } from "react";
+
+import { useSWRConfig } from "swr";
 import axios from "axios";
+
 import PlusIcon from "@/assets/icons/PlusIcon";
 
 const AddTask = () => {
   const [loading, setLoading] = useState(false);
+  const { mutate } = useSWRConfig();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = new FormData(event.target);
@@ -20,6 +25,7 @@ const AddTask = () => {
         created_at: new Date(),
         completed_at: null,
       });
+      mutate("all-todos");
     } catch (e) {
       alert(e);
     } finally {

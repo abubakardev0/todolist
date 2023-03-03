@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useSWRConfig } from "swr";
 import axios from "axios";
 
 import CheckCircleIcon from "@/assets/icons/CheckCircleIcon";
@@ -8,6 +9,7 @@ import DotIcon from "@/assets/icons/DotIcon";
 const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
   const [isOpen, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { mutate } = useSWRConfig();
 
   const changeStatus = async (entityId, status) => {
     try {
@@ -18,6 +20,7 @@ const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
           status: status,
         }
       );
+      mutate("all-todos");
     } catch (e) {
       alert(e);
     } finally {
@@ -32,6 +35,7 @@ const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
       await axios.delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/todos/${entityId}`
       );
+      mutate("all-todos");
     } catch (e) {
       alert(e.message);
     } finally {
