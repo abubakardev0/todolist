@@ -1,39 +1,42 @@
 import { useState } from "react";
 
+import axios from "axios";
+
 import CheckCircleIcon from "@/assets/icons/CheckCircleIcon";
 import DotIcon from "@/assets/icons/DotIcon";
 
 const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
   const [isOpen, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const changeStatus = async (id, status) => {
+
+  const changeStatus = async (entityId, status) => {
     try {
-      await fetch("/api/changestatus", {
-        method: "POST",
-        body: JSON.stringify({
-          entityId: id,
+      setLoading(true);
+      await axios.patch(
+        `http://localhost:8080/api/todos/${entityId}`,
+        {
           status: status,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
+        }
+      );
     } catch (e) {
       alert(e);
+    } finally {
+      setLoading(false);
     }
   };
 
   const deleteTask = async (entityId) => {
     try {
-      await fetch("/api/deletetask", {
-        body: JSON.stringify(entityId),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      });
+      setLoading(true);
+
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/todos/${entityId}`
+      );
     } catch (e) {
-      alert(e);
+      alert(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +44,11 @@ const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
     <>
       <div className="relative py-2 pl-2 pr-1 flex gap-2">
         <span className="px-1">
-          <button onClick={() => changeStatus(id, !isCompleted)}>
+          <button
+            disabled={loading ? true : false}
+            onClick={() => changeStatus(id, !isCompleted)}
+            className="disabled:cursor-not-allowed"
+          >
             <CheckCircleIcon
               className={`w-6 h-6 ${
                 isCompleted ? "fill-primary" : "fill-none stroke-primary"
@@ -82,7 +89,8 @@ const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
           )}
           <button
             onClick={() => deleteTask(id)}
-            className="mt-2 rounded-md w-full bg-red-200 hover:bg-red-300 py-1.5 text-red-500"
+            disabled={loading ? true : false}
+            className="disabled:cursor-not-allowed mt-2 rounded-md w-full bg-red-200 hover:bg-red-300 py-1.5 text-red-500"
           >
             Delete
           </button>

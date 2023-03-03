@@ -1,6 +1,9 @@
+import { useState } from "react";
+import axios from "axios";
 import PlusIcon from "@/assets/icons/PlusIcon";
 
 const AddTask = () => {
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = new FormData(event.target);
@@ -10,22 +13,19 @@ const AddTask = () => {
       return;
     }
     try {
-      await fetch("/api/addtask", {
-        body: JSON.stringify({
-          task: formData.task,
-          completed: false,
-          created_at: new Date(),
-          completed_at: null,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
+      setLoading(true);
+      await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/todos/`, {
+        task: formData.task,
+        completed: false,
+        created_at: new Date(),
+        completed_at: null,
       });
     } catch (e) {
       alert(e);
+    } finally {
+      setLoading(false);
+      event.target.reset();
     }
-    event.target.reset();
   };
 
   return (
@@ -42,7 +42,11 @@ const AddTask = () => {
           placeholder="Add new task"
           className="w-full focus:outline-none"
         />
-        <button type="submit" className="w-fit rounded-md bg-[#bbb18c] p-1">
+        <button
+          disabled={loading ? true : false}
+          type="submit"
+          className="disabled:cursor-not-allowed w-fit rounded-md bg-[#bbb18c] p-1"
+        >
           <PlusIcon />
         </button>
       </div>

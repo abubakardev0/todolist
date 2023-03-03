@@ -45,6 +45,7 @@ export default function Home() {
             width={300}
             alt="user avatar"
             className="object-center object-contain"
+            priority
           />
         </div>
         <AddTask />
