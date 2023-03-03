@@ -9,12 +9,11 @@ const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
   const [isOpen, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
   const changeStatus = async (entityId, status) => {
     try {
       setLoading(true);
       await axios.patch(
-        `http://localhost:8080/api/todos/${entityId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/todos/${entityId}`,
         {
           status: status,
         }
