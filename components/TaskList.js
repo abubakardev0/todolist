@@ -50,8 +50,8 @@ const List = () => {
 
       {isOpen && (
         <div className="relative -mt-4 w-72 md:w-80 xl:w-96 divide-y divide-alternative bg-opacity-80 backdrop-blur-sm backdrop-filter scroll-p-2 list-scrollbar min-h-fit max-h-72 overflow-auto py-2.5 bg-secondary rounded-lg drop-shadow-sm">
-          {todos.length > 0 ? (
-            todos.map((t) => (
+          {todos?.length > 0 ? (
+            todos?.map((t) => (
               <Task
                 key={t.entityId}
                 id={t.entityId}

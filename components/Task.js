@@ -9,7 +9,10 @@ import DotIcon from "@/assets/icons/DotIcon";
 const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
   const [isOpen, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { mutate } = useSWRConfig();
+  //both status and delete have the same loading state
+  // so if users send a certain request like delete, the other thing won't work
+
+  const { mutate } = useSWRConfig(); //used to mutate the data using cache revalidation by SWR hook
 
   const changeStatus = async (entityId, status) => {
     try {
@@ -22,7 +25,7 @@ const Task = ({ id, task, isCompleted, completedAt, createdAt }) => {
       );
       mutate("all-todos");
     } catch (e) {
-      alert(e);
+      alert(e.message);
     } finally {
       setLoading(false);
     }

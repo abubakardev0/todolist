@@ -27,7 +27,7 @@ const AddTask = () => {
       });
       mutate("all-todos");
     } catch (e) {
-      alert(e);
+      alert(e.message);
     } finally {
       setLoading(false);
       event.target.reset();
