@@ -13,8 +13,8 @@ const AddTask = () => {
     event.preventDefault();
     const form = new FormData(event.target);
     const formData = Object.fromEntries(form.entries());
-    if (formData.task.length === 0) {
-      alert("Please add task");
+    if (!formData.task) {
+      alert("Please add todo task");
       return;
     }
     try {
@@ -43,10 +43,19 @@ const AddTask = () => {
       <div className="flex justify-between py-2 w-72 md:w-80 xl:w-96 bg-white rounded-md pl-3 pr-2 focus:outline-none text-neutral-800">
         <input
           type="text"
+          inputMode="text"
+          pattern="^\s*\S.*$"
           autoComplete="off"
           name="task"
           placeholder="Add new task"
           className="w-full focus:outline-none"
+          required
+          onInvalid={(e) =>
+            e.target.setCustomValidity(
+              "Input doesn't just contain whitespaces!"
+            )
+          }
+          onInput={(e) => e.target.setCustomValidity("")}
         />
         <button
           disabled={loading ? true : false}
